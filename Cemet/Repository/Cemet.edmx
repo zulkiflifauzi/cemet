@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CemetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="ItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nama" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="KodeSendiri" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Barcode" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Satuan_SatuanId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Satuan">
+          <Key>
+            <PropertyRef Name="SatuanId" />
+          </Key>
+          <Property Name="SatuanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nama" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Item_Satuan">
+          <End Role="Satuan" Type="Self.Satuan" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Satuan">
+              <PropertyRef Name="SatuanId" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="Satuan_SatuanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CemetModelStoreContainer">
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Satuan" EntityType="Self.Satuan" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Item_Satuan" Association="Self.FK_Item_Satuan">
+            <End Role="Satuan" EntitySet="Satuan" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CemetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CemetEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Item" EntityType="CemetModel.Item" />
+          <EntitySet Name="Satuan" EntityType="CemetModel.Satuan" />
+          <AssociationSet Name="FK_Item_Satuan" Association="CemetModel.FK_Item_Satuan">
+            <End Role="Satuan" EntitySet="Satuan" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nama" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="KodeSendiri" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Barcode" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Satuan_SatuanId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Satuan" Relationship="CemetModel.FK_Item_Satuan" FromRole="Item" ToRole="Satuan" />
+        </EntityType>
+        <EntityType Name="Satuan">
+          <Key>
+            <PropertyRef Name="SatuanId" />
+          </Key>
+          <Property Name="SatuanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nama" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Item" Relationship="CemetModel.FK_Item_Satuan" FromRole="Satuan" ToRole="Item" />
+        </EntityType>
+        <Association Name="FK_Item_Satuan">
+          <End Type="CemetModel.Satuan" Role="Satuan" Multiplicity="1" />
+          <End Type="CemetModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Satuan">
+              <PropertyRef Name="SatuanId" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="Satuan_SatuanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CemetModelStoreContainer" CdmEntityContainer="CemetEntities">
+          <EntitySetMapping Name="Item">
+            <EntityTypeMapping TypeName="CemetModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="Satuan_SatuanId" ColumnName="Satuan_SatuanId" />
+                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+                <ScalarProperty Name="KodeSendiri" ColumnName="KodeSendiri" />
+                <ScalarProperty Name="Nama" ColumnName="Nama" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Satuan">
+            <EntityTypeMapping TypeName="CemetModel.Satuan">
+              <MappingFragment StoreEntitySet="Satuan">
+                <ScalarProperty Name="Nama" ColumnName="Nama" />
+                <ScalarProperty Name="SatuanId" ColumnName="SatuanId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
